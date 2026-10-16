@@ -1,0 +1,143 @@
+import java.util.Scanner;
+class BankAccount {
+    private String accountNumber;
+    private String accountHolderName;
+    private double accountBalance;
+    BankAccount(String accountNumber, String accountHolderName,
+                double accountBalance) {
+        this.accountNumber = accountNumber;
+        this.accountHolderName = accountHolderName;
+        this.accountBalance = accountBalance;
+    }
+    public synchronized void deposit(String userName, double amount) {
+        if (amount <= 0) {
+            System.out.println(userName + ": Invalid deposit amount.");
+            return;
+        }
+        accountBalance += amount;
+        System.out.println(userName + " deposited: " + amount);
+        System.out.println("Updated balance: " + accountBalance);
+    }
+
+    public synchronized void withdraw(String userName, double amount) {
+        if (amount <= 0) {
+            System.out.println(userName + ": Invalid withdrawal amount.");
+            return;
+        }
+
+        if (amount <= accountBalance) {
+            accountBalance -= amount;
+
+            System.out.println(userName + " withdrew: " + amount);
+            System.out.println("Updated balance: " + accountBalance);
+        } else {
+            System.out.println(userName + ": Insufficient Balance");
+            System.out.println("Available balance: " + accountBalance);
+        }
+    }
+    public synchronized void displayBalance() {
+        System.out.println("\nAccount Number: " + accountNumber);
+        System.out.println("Account Holder: " + accountHolderName);
+        System.out.println("Current Balance: " + accountBalance);
+    }
+}
+
+class UserTransaction extends Thread {
+    private BankAccount account;
+    private String userName;
+    private String transactionType;
+    private double amount;
+    UserTransaction(BankAccount account, String userName,
+                    String transactionType, double amount) {
+        this.account = account;
+        this.userName = userName;
+        this.transactionType = transactionType;
+        this.amount = amount;
+    }
+    @Override
+    public void run() {
+        if (transactionType.equalsIgnoreCase("deposit")) {
+            account.deposit(userName, amount);
+        } else if (transactionType.equalsIgnoreCase("withdraw")) {
+            account.withdraw(userName, amount);
+        } else {
+            System.out.println(userName + ": Invalid transaction type.");
+        }
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter account number: ");
+        String accountNumber = sc.nextLine();
+
+        System.out.print("Enter account holder name: ");
+        String accountHolderName = sc.nextLine();
+
+        System.out.print("Enter initial account balance: ");
+        double balance = sc.nextDouble();
+        sc.nextLine();
+
+        if (balance < 0) {
+            System.out.println("Invalid initial balance.");
+            sc.close();
+            return;
+        }
+        BankAccount account =
+                new BankAccount(accountNumber, accountHolderName, balance);
+
+        account.displayBalance();
+
+        System.out.print("\nEnter number of transactions: ");
+        int n = sc.nextInt();
+        sc.nextLine();
+
+        if (n <= 0) {
+            System.out.println("Invalid number of transactions.");
+            sc.close();
+            return;
+        }
+
+        UserTransaction[] transactions = new UserTransaction[n];
+
+        for (int i = 0; i < n; i++) {
+            System.out.println("\nTransaction " + (i + 1));
+
+            System.out.print("Enter user name: ");
+            String userName = sc.nextLine();
+
+            System.out.print("Enter transaction type (deposit/withdraw): ");
+            String type = sc.nextLine().trim();
+
+            System.out.print("Enter amount: ");
+            double amount = sc.nextDouble();
+            sc.nextLine();
+
+            transactions[i] =
+                    new UserTransaction(account, userName, type, amount);
+        }
+
+        System.out.println("\n--- Processing Transactions ---");
+
+        for (UserTransaction transaction : transactions) {
+            transaction.start();
+        }
+
+        for (UserTransaction transaction : transactions) {
+            try {
+                transaction.join();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                System.out.println("Transaction processing interrupted.");
+                sc.close();
+                return;
+            }
+        }
+
+        System.out.println("\n--- Final Account Details ---");
+        account.displayBalance();
+
+        sc.close();
+    }
+}
