@@ -1,0 +1,82 @@
+Account.java
+public class Account {
+    String number;
+    String type;
+    double balance;
+    public Account(String number, String type, double balance) {
+        this.number = number;
+        this.type = type;
+        this.balance = balance;
+    }
+    public void deposit(double amount) {
+        balance = balance + amount;
+        System.out.println("Deposit successful");
+    }
+    public void withdraw(double amount) {
+        if (amount <= balance) {
+            balance = balance - amount;
+            System.out.println("Withdrawal successful");
+        } else {
+            System.out.println("Insufficient balance");
+        } }
+    public void display() {
+        System.out.println("Account Number: " + number);
+        System.out.println("Account Type: " + type);
+        System.out.println("Balance: " + balance);
+    }}
+
+
+
+
+
+Loan.java
+public class Loan {
+    String number;
+    String type;
+    double amount;
+    public Loan(String number, String type, double amount) {
+        this.number = number;
+        this.type = type;
+        this.amount = amount;
+    }
+    public void display() {
+        System.out.println("Loan Number: " + number);
+        System.out.println("Loan Type: " + type);
+        System.out.println("Loan Amount: " + amount);
+    }}
+Customer.java 
+public class Customer {
+    String id;
+    String name;
+    String contact;
+    public Customer(String id, String name, String contact) {
+        this.id = id;
+        this.name = name;
+        this.contact = contact;
+    }
+    public void display() {
+        System.out.println("Customer ID: " + id);
+        System.out.println("Customer Name: " + name);
+       System.out.println("Contact: " + contact);
+    }
+}
+Main.java
+public class MyClass {
+    public static void main(String[] args) {
+        Customer c = new Customer("C101", "Rahul", "9876543210");
+        Loan l = new Loan("L101", "Home Loan", 500000);
+        Account a = new Account("A101", "Savings", 20000);
+        System.out.println("CUSTOMER");
+        c.display();
+        System.out.println("\nLOAN");
+        l.display();
+        System.out.println("\nACCOUNT");
+        a.display();
+        System.out.println("\nTRANSACTIONS");
+        a.deposit(5000);
+        a.withdraw(2000);
+        System.out.println("\nUPDATED ACCOUNT");
+        a.display();
+    }
+}
+
