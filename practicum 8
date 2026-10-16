@@ -1,0 +1,105 @@
+import java.util.Scanner;
+class TicketBooking {
+    String passengerName;
+    String bookingStatus;
+    TicketBooking(String passengerName) {
+        this.passengerName = passengerName;
+        this.bookingStatus = "Booked";
+    }
+    void displayBookingDetails() {
+        System.out.println("Passenger Name: " + passengerName);
+        System.out.println("Booking Status: " + bookingStatus);
+        System.out.println("Thread Name: " + Thread.currentThread().getName());
+        System.out.println("----------------------------");
+    }
+}
+class BookingThread extends Thread {
+    TicketBooking booking;
+
+    BookingThread(TicketBooking booking) {
+        this.booking = booking;
+    }
+
+    @Override
+    public void run() {
+        try {
+            Thread.sleep(200);
+            booking.displayBookingDetails();
+        } catch (InterruptedException e) {
+            System.out.println("Booking interrupted.");
+            Thread.currentThread().interrupt();
+        }
+    }
+}
+class BookingRunnable implements Runnable {
+    TicketBooking booking;
+
+    BookingRunnable(TicketBooking booking) {
+        this.booking = booking;
+    }
+    @Override
+    public void run() {
+        try {
+            Thread.sleep(200);
+           booking.displayBookingDetails();
+        } catch (InterruptedException e) {
+            System.out.println("Booking interrupted.");
+            Thread.currentThread().interrupt();
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter number of passengers: ");
+        int n = sc.nextInt();
+        sc.nextLine();
+        if (n <= 0) {
+            System.out.println("Invalid number of passengers.");
+            sc.close();
+            return;
+        }
+        Thread[] threads = new Thread[n];
+        for (int i = 0; i < n; i++) {
+            System.out.print("Enter passenger " + (i + 1) + " name: ");
+            String name = sc.nextLine().trim();
+
+            while (name.isEmpty()) {
+                System.out.print("Name cannot be empty. Enter again: ");
+                name = sc.nextLine().trim();
+            }
+            TicketBooking booking = new TicketBooking(name);
+
+            if (i % 2 == 0) {
+                threads[i] = new BookingThread(booking);
+            } else {
+                BookingRunnable task = new BookingRunnable(booking);
+                threads[i] = new Thread(task);
+            }
+
+            threads[i].setName("Booking-Thread-" + (i + 1));
+        }
+
+        System.out.println("\nProcessing passenger bookings...\n");
+
+        for (Thread thread : threads) {
+            thread.start();
+        }
+
+        for (Thread thread : threads) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                System.out.println("Main thread interrupted.");
+                Thread.currentThread().interrupt();
+                sc.close();
+                return;
+            }
+        }
+
+        System.out.println("All passenger booking requests processed successfully.");
+
+        sc.close();
+    }
+}
