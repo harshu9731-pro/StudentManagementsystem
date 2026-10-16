@@ -1,0 +1,120 @@
+import java.util.Scanner; 
+interface SmartDevice { 
+void turnOn(); 
+void turnOff(); 
+} 
+class SmartFan implements SmartDevice { 
+public void turnOn()  { System.out.println("Smart Fan ON"); } 
+public void turnOff() { System.out.println("Smart Fan OFF"); } 
+} 
+class SmartLight implements SmartDevice { 
+public void turnOn()  { System.out.println("Smart Light ON"); } 
+public void turnOff() { System.out.println("Smart Light OFF"); } 
+} 
+class SmartAC implements SmartDevice { 
+public void turnOn()  { System.out.println("Smart AC ON"); } 
+public void turnOff() { System.out.println("Smart AC OFF"); } 
+} 
+public class Main { 
+public static void main(String[] args) { 
+Scanner s = new Scanner(System.in); 
+SmartDevice device; 
+System.out.println("1. Fan ON"); 
+System.out.println("2. Fan OFF"); 
+System.out.println("3. Light ON"); 
+System.out.println("4. Light OFF"); 
+System.out.println("5. AC ON"); 
+System.out.println("6. AC OFF"); 
+System.out.println("7. Runtime Polymorphism - Fan"); 
+System.out.println("8. Runtime Polymorphism - Light"); 
+System.out.println("9. Runtime Polymorphism - AC"); 
+System.out.println("10. Common Interface Behavior"); 
+System.out.println("11. Incomplete Implementation"); 
+System.out.println("12. Object of Interface"); 
+System.out.println("13. Null Interface Reference"); 
+System.out.println("14. Incorrect Method Name"); 
+System.out.println("15. Incorrect Method Signature"); 
+System.out.println("16. Missing implements"); 
+System.out.println("17. Reduced Access Modifier"); 
+System.out.print("Enter choice: "); 
+int c = s.nextInt(); 
+switch (c) { 
+case 1: 
+device = new SmartFan(); 
+device.turnOn(); 
+break; 
+case 2: 
+device = new SmartFan(); 
+device.turnOff(); 
+break; 
+case 3: 
+device = new SmartLight(); 
+device.turnOn(); 
+break; 
+case 4: 
+device = new SmartLight(); 
+device.turnOff 
+break; 
+case 5: 
+device = new SmartAC(); 
+device.turnOn(); 
+break; 
+case 6: 
+                device = new SmartAC(); 
+                device.turnOff(); 
+                break; 
+            case 7: 
+                device = new SmartFan(); 
+                device.turnOn(); 
+                device.turnOff(); 
+                break; 
+            case 8: 
+                device = new SmartLight(); 
+                device.turnOn(); 
+                device.turnOff(); 
+                break; 
+            case 9: 
+                device = new SmartAC(); 
+                device.turnOn(); 
+                device.turnOff(); 
+                break; 
+            case 10: 
+                device = new SmartFan(); 
+                device.turnOn(); 
+                device = new SmartLight(); 
+                device.turnOn(); 
+                device = new SmartAC(); 
+                device.turnOn(); 
+                break; 
+            case 11: 
+                System.out.println("Compilation Error: SmartFan must implement turnOff()"); 
+                break; 
+            case 12: 
+                System.out.println("Compilation Error: Cannot instantiate SmartDevice"); 
+                break; 
+            case 13: 
+                device = null; 
+                try { 
+                    device.turnOn(); 
+                } catch (NullPointerException e) { 
+                    System.out.println("NullPointerException"); 
+                } 
+                break; 
+            case 14: 
+                System.out.println("Compilation Error: Cannot find symbol turnON()"); 
+                break; 
+            case 15: 
+                System.out.println("Compilation Error: Method signature does not match"); 
+                break; 
+            case 16: 
+                System.out.println("Compilation Error: SmartFan must implement SmartDevice"); 
+                break; 
+            case 17: 
+                System.out.println("Compilation Error: Cannot reduce access of interface method"); 
+                break; 
+            default: 
+                System.out.println("Invalid choice"); 
+        } 
+        s.close(); 
+    } 
+} 
