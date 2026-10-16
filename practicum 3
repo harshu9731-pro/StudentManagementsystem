@@ -1,0 +1,43 @@
+abstract class Vehicle { 
+    String vehicleNumber; 
+    String brand; 
+    Vehicle(String vehicleNumber, String brand) { 
+        this.vehicleNumber = vehicleNumber; 
+        this.brand = brand; 
+    } 
+    abstract void startEngine(); 
+    final void showVehicleIdentity() { 
+        System.out.println("Vehicle No: " + vehicleNumber); 
+        System.out.println("Brand: " + brand);  
+    } 
+} 
+class Car extends Vehicle { 
+    Car(String vehicleNumber, String brand) { 
+        super(vehicleNumber, brand); 
+    } 
+    void startEngine() { 
+        System.out.println("Car engine is starting..."); 
+        System.out.println("Car engine started successfully."); 
+    } 
+} 
+class Bike extends Vehicle { 
+    Bike(String vehicleNumber, String brand) { 
+        super(vehicleNumber, brand);  
+    } 
+    void startEngine() { 
+        System.out.println("Bike engine is starting..."); 
+        System.out.println("Bike engine started successfully."); 
+    } 
+} 
+public class Main { 
+    public static void main(String[] args) { 
+        Car car = new Car("KA01AB1234", "Toyota"); 
+        System.out.println("----- CAR DETAILS -----"); 
+        car.startEngine(); 
+        car.showVehicleIdentity(); 
+        System.out.println(); 
+        Bike bike = new Bike("KA05XY5678", "Honda"); 
+        System.out.println("----- BIKE DETAILS -----"); 
+        bike.startEngine(); 
+        bike.showVehicleIdentity(); 
+    }
